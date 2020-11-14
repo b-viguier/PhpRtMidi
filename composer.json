@@ -2,6 +2,11 @@
     "name": "bviguier/php-rtmidi",
     "description": "Realtime MIDI input/output, thanks to RtMidi and FFI.",
     "type": "library",
+    "autoload": {
+        "psr-4": {
+            "bviguier\\RtMidi\\": "src/"
+        }
+    },
     "require": {
         "php": "^7.4",
         "ext-FFI": "^7.4"
