@@ -61,6 +61,14 @@ final class MidiBrowser
         return new Input($name, $this->ffi, $input);
     }
 
+    public function openVirtualInput(string $name, int $queueSize = 64, int $api = API::UNSPECIFIED): Input
+    {
+        $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
+        $this->ffi->rtmidi_open_virtual_port($input, $name);
+
+        return new Input($name, $this->ffi, $input);
+    }
+
     public function availableOutputs(): array
     {
         $count = $this->ffi->rtmidi_get_port_count($this->defaultOutput);
@@ -89,6 +97,14 @@ final class MidiBrowser
 
         $output = $this->ffi->rtmidi_out_create($api, $name);
         $this->ffi->rtmidi_open_port($output, $port, "[RtMidi] $name");
+
+        return new Output($name, $this->ffi, $output);
+    }
+
+    public function openVirtualOutput(string $name, int $api = API::UNSPECIFIED): Output
+    {
+        $output = $this->ffi->rtmidi_out_create($api, $name);
+        $this->ffi->rtmidi_open_virtual_port($output, $name);
 
         return new Output($name, $this->ffi, $output);
     }
