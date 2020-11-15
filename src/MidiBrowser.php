@@ -2,13 +2,35 @@
 
 namespace bviguier\RtMidi;
 
+use bviguier\RtMidi\Exception\LibraryException;
+
 final class MidiBrowser
 {
+    /**
+     * @throws LibraryException
+     */
     public function __construct(string $rtMidiLibPath = null)
     {
-        $this->ffi = \FFI::cdef($this->headers(), $rtMidiLibPath ?? 'librtmidi.dylib');
-        $this->defaultInput = $this->ffi->rtmidi_in_create_default();
-        $this->defaultOutput = $this->ffi->rtmidi_out_create_default();
+        try {
+            $this->ffi = \FFI::cdef($this->headers(), $rtMidiLibPath ?? self::defaultRtMidiLibrary());
+            $this->defaultInput = $this->ffi->rtmidi_in_create_default();
+            $this->defaultOutput = $this->ffi->rtmidi_out_create_default();
+        } catch(\FFI\Exception $exception) {
+            throw new LibraryException('Cannot load RtMidi library', 0, $exception);
+        }
+    }
+
+    /**
+     * @throws LibraryException
+     */
+    public static function defaultRtMidiLibrary(): string
+    {
+        switch(PHP_OS_FAMILY) {
+            case 'Darwin': return 'librtmidi.dylib';
+            case 'Linux': return 'librtmidi4.so';
+        }
+
+        throw new LibraryException(sprintf('No default RtMidi library configured for your OS family (%s).', PHP_OS_FAMILY));
     }
 
     public function __destruct()
@@ -137,14 +159,12 @@ const char* rtmidi_get_port_name (RtMidiPtr device, unsigned int portNumber);
 RtMidiInPtr rtmidi_in_create_default (void);
 RtMidiInPtr rtmidi_in_create (enum RtMidiApi api, const char *clientName, unsigned int queueSizeLimit);
 void rtmidi_in_free (RtMidiInPtr device);
-enum RtMidiApi rtmidi_in_get_current_api (RtMidiPtr device);
 void rtmidi_in_ignore_types (RtMidiInPtr device, bool midiSysex, bool midiTime, bool midiSense);
 double rtmidi_in_get_message (RtMidiInPtr device, unsigned char *message, size_t *size);
 
 RtMidiOutPtr rtmidi_out_create_default (void);
 RtMidiOutPtr rtmidi_out_create (enum RtMidiApi api, const char *clientName);
 void rtmidi_out_free (RtMidiOutPtr device);
-enum RtMidiApi rtmidi_out_get_current_api (RtMidiPtr device);
 int rtmidi_out_send_message (RtMidiOutPtr device, const unsigned char *message, int length);
 C_HEADER;
 
