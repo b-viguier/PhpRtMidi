@@ -5,3 +5,8 @@ parameters:
         - tests
     stubFiles:
         - stubs/FFI.stub
+    scanFiles:
+        - stubs/RtMidi.php
+    ignoreErrors:
+        - '#Cannot access offset int on FFI\\CData<int>\.#'
+        - '#Strict comparison using === between 64 and 0 will always evaluate to false\.#'

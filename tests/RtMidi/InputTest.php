@@ -33,6 +33,7 @@ class InputTest extends TestCase
         $msgReceived = $input->pullMessage();
 
         $this->assertNotNull($msgReceived);
+        assert(!is_null($msgReceived));
         $this->assertInstanceOf(Message::class, $msgReceived);
         $this->assertSame($msgSent->toIntegers(), $msgReceived->toIntegers());
 

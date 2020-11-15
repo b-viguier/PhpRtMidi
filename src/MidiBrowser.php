@@ -40,8 +40,12 @@ final class MidiBrowser
         $this->ffi->rtmidi_out_free($this->defaultOutput);
     }
 
+    /**
+     * @return array<int>
+     */
     public function availableAPIs(): array
     {
+        /** @var \FFI\CData<int> $buffer */
         $buffer = $this->ffi->new('enum RtMidiApi[6]');
         $nbApis = $this->ffi->rtmidi_get_compiled_api($buffer, 6);
         $apiList = [];
@@ -52,6 +56,9 @@ final class MidiBrowser
         return $apiList;
     }
 
+    /**
+     * @return array<string>
+     */
     public function availableInputs(): array
     {
         $count = $this->ffi->rtmidi_get_port_count($this->defaultInput);
@@ -63,7 +70,7 @@ final class MidiBrowser
         return $inputs;
     }
 
-    public function openInput(string $name, int $queueSize = 64, int $api = API::UNSPECIFIED): Input
+    public function openInput(string $name, int $queueSize = 64, int $api = Api::UNSPECIFIED): Input
     {
         $port = -1;
         $count = $this->ffi->rtmidi_get_port_count($this->defaultInput);
@@ -84,7 +91,7 @@ final class MidiBrowser
         return new Input($name, $this->ffi, $input);
     }
 
-    public function openVirtualInput(string $name, int $queueSize = 64, int $api = API::UNSPECIFIED): Input
+    public function openVirtualInput(string $name, int $queueSize = 64, int $api = Api::UNSPECIFIED): Input
     {
         $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
         $this->ffi->rtmidi_open_virtual_port($input, $name);
@@ -92,6 +99,9 @@ final class MidiBrowser
         return new Input($name, $this->ffi, $input);
     }
 
+    /**
+     * @return array<string>
+     */
     public function availableOutputs(): array
     {
         $count = $this->ffi->rtmidi_get_port_count($this->defaultOutput);
@@ -103,7 +113,7 @@ final class MidiBrowser
         return $outputs;
     }
 
-    public function openOutput(string $name, int $api = API::UNSPECIFIED): Output
+    public function openOutput(string $name, int $api = Api::UNSPECIFIED): Output
     {
         $port = -1;
         $count = $this->ffi->rtmidi_get_port_count($this->defaultOutput);
@@ -124,7 +134,7 @@ final class MidiBrowser
         return new Output($name, $this->ffi, $output);
     }
 
-    public function openVirtualOutput(string $name, int $api = API::UNSPECIFIED): Output
+    public function openVirtualOutput(string $name, int $api = Api::UNSPECIFIED): Output
     {
         $output = $this->ffi->rtmidi_out_create($api, $name);
         $this->ffi->rtmidi_open_virtual_port($output, $name);
@@ -133,7 +143,9 @@ final class MidiBrowser
     }
 
     private \FFI $ffi;
+    /** @var \FFI\CData<\RtMidiInPtr>  */
     private \FFI\CData $defaultInput;
+    /** @var \FFI\CData<\RtMidiOutPtr>  */
     private \FFI\CData $defaultOutput;
 
     private function headers(): string

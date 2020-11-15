@@ -4,6 +4,9 @@ namespace bviguier\RtMidi;
 
 final class Message
 {
+    /**
+     * @param array<int> $bytes
+     */
     static public function fromIntegers(array $bytes): self
     {
         $instance = new self;
@@ -22,6 +25,9 @@ final class Message
         return $this->bytes[$index];
     }
 
+    /**
+     * @return array<int>
+     */
     public function toIntegers(): array
     {
         return $this->bytes;
@@ -31,5 +37,6 @@ final class Message
     {
     }
 
+    /** @var array<int> */
     private array $bytes = [];
 }

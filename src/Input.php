@@ -4,6 +4,9 @@ namespace bviguier\RtMidi;
 
 final class Input
 {
+    /**
+     * @param \FFI\CData<\RtMidiInPtr> $input
+     */
     public function __construct(string $name, \FFI $ffi, \FFI\CData $input)
     {
         $this->name = $name;
@@ -29,6 +32,7 @@ final class Input
     public function pullMessage(): ?Message
     {
         $buffer = $this->ffi->new("unsigned char[64]");
+        /** @var \FFI\CData<int> $maxSize */
         $maxSize = $this->ffi->new('size_t');
         $maxSize->cdata = 64;
         $this->ffi->rtmidi_in_get_message($this->input, $buffer, \FFI::addr($maxSize));
@@ -45,5 +49,6 @@ final class Input
 
     private string $name;
     private \FFI $ffi;
+    /** @var \FFI\CData<\RtMidiInPtr> */
     private \FFI\CData $input;
 }

@@ -4,6 +4,9 @@ namespace bviguier\RtMidi;
 
 class Output
 {
+    /**
+     * @param \FFI\CData<\RtMidiOutPtr> $output
+     */
     public function __construct(string $name, \FFI $ffi, \FFI\CData $output)
     {
         $this->name = $name;
@@ -24,6 +27,7 @@ class Output
     public function send(Message $message): void
     {
         $size = $message->size();
+        /** @var \FFI\CData<int> $buffer */
         $buffer = $this->ffi->new("unsigned char[$size]");
         $i = 0;
         foreach ($message->toIntegers() as $byte) {
@@ -35,5 +39,6 @@ class Output
 
     private string $name;
     private \FFI $ffi;
+    /** @var \FFI\CData<\RtMidiOutPtr> */
     private \FFI\CData $output;
 }
