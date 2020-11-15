@@ -4,7 +4,7 @@ namespace bviguier\tests\RtMidi;
 
 use bviguier\RtMidi\Message;
 use bviguier\RtMidi\MidiBrowser;
-use bviguier\RtMidi\MidiError;
+use bviguier\RtMidi\Exception\MidiException;
 use PHPUnit\Framework\TestCase;
 
 class InputTest extends TestCase
@@ -13,7 +13,7 @@ class InputTest extends TestCase
     {
         $browser = new MidiBrowser();
 
-        $this->expectException(MidiError::class);
+        $this->expectException(MidiException::class);
         $this->expectExceptionMessage('Unknown input [Unknown Input]');
         $browser->openInput('Unknown Input');
     }

@@ -3,6 +3,7 @@
 namespace bviguier\RtMidi;
 
 use bviguier\RtMidi\Exception\LibraryException;
+use bviguier\RtMidi\Exception\MidiException;
 
 final class MidiBrowser
 {
@@ -74,7 +75,7 @@ final class MidiBrowser
         }
 
         if($port < 0) {
-            throw new MidiError("Unknown input [$name]");
+            throw new MidiException("Unknown input [$name]");
         }
 
         $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
@@ -114,7 +115,7 @@ final class MidiBrowser
         }
 
         if($port < 0) {
-            throw new MidiError("Unknown output [$name]");
+            throw new MidiException("Unknown output [$name]");
         }
 
         $output = $this->ffi->rtmidi_out_create($api, $name);
