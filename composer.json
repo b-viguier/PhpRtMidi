@@ -20,5 +20,8 @@
             "name": "Benoit Viguier",
             "email": "benoit.viguier.pro+github@gmail.com"
         }
-    ]
+    ],
+    "scripts": {
+        "phpstan": "phpstan analyse"
+    }
 }

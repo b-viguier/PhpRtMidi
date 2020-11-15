@@ -1,0 +1,21 @@
+<?php
+
+namespace {
+    /**
+    * @method void rtmidi_in_free(\FFI\CData $data)
+    * @method float rtmidi_in_get_message(\FFI\CData $input, \FFI\CData &$buffer, \FFI\CData &$size)
+    */
+    final class FFI
+    {
+    }
+}
+
+namespace FFI {
+
+    /**
+    * @property mixed $cdata
+    */
+    final class CData
+    {
+    }
+}
