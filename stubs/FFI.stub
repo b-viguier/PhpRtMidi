@@ -13,6 +13,7 @@ namespace {
     * @method \FFI\CData<\RtMidiInPtr> rtmidi_in_create(int $api, string $clientName, int $queueSizeLimit)
     * @method void rtmidi_in_free(\FFI\CData<\RtMidiInPtr> $input)
     * @method float rtmidi_in_get_message(\FFI\CData<\RtMidiInPtr> $input, \FFI\CData<mixed> &$buffer, \FFI\CData<int> $size)
+    * @method void rtmidi_in_ignore_types(\FFI\CData<\RtMidiInPtr> $input, bool $sysex, bool $time, bool $sense)
     *
     * @method \FFI\CData<\RtMidiOutPtr> rtmidi_out_create_default()
     * @method \FFI\CData<\RtMidiOutPtr> rtmidi_out_create(int $api, string $clientName)

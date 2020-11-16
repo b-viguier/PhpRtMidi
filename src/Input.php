@@ -4,6 +4,12 @@ namespace bviguier\RtMidi;
 
 final class Input
 {
+    public const ALLOW_NONE = 0;
+    public const ALLOW_SYSEX = 1;
+    public const ALLOW_TIME = 2;
+    public const ALLOW_SENSE = 4;
+    public const ALLOW_ALL = self::ALLOW_SYSEX | self::ALLOW_TIME | self::ALLOW_SENSE;
+
     /**
      * @param \FFI\CData<\RtMidiInPtr> $input
      */
@@ -24,9 +30,18 @@ final class Input
         return $this->name;
     }
 
-    public function ignoreTypes(): void
+    /**
+     * By default Sysex, timing and active sensing messages are ignored.
+     * @param int $allowMask Combination of self::ALLOW_*
+     */
+    public function allow(int $allowMask): void
     {
-        // TODO
+        $this->ffi->rtmidi_in_ignore_types(
+            $this->input,
+            !(bool) ($allowMask & self::ALLOW_SYSEX),
+            !(bool) ($allowMask & self::ALLOW_TIME),
+            !(bool) ($allowMask & self::ALLOW_SENSE),
+        );
     }
 
     public function pullMessage(): ?Message
