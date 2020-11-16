@@ -4,6 +4,8 @@ namespace bviguier\RtMidi;
 
 final class Message
 {
+    public const MAX_LENGTH = 1024;
+
     /**
      * @param array<int> $bytes
      */
@@ -11,6 +13,16 @@ final class Message
     {
         $instance = new self;
         $instance->bytes = $bytes;
+
+        return $instance;
+    }
+
+    static public function fromBinString(string $bytes): self
+    {
+        $instance = new self;
+        for($i=0, $l=strlen($bytes); $i<$l; ++$i) {
+            $instance->bytes[] = ord($bytes[$i]);
+        }
 
         return $instance;
     }
@@ -31,6 +43,16 @@ final class Message
     public function toIntegers(): array
     {
         return $this->bytes;
+    }
+
+    public function toBinString(): string
+    {
+        $str = '';
+        foreach ($this->bytes as $byte) {
+            $str .= chr($byte);
+        }
+
+        return $str;
     }
 
     private function __construct()

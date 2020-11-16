@@ -18,6 +18,9 @@ final class Input
         $this->name = $name;
         $this->ffi = $ffi;
         $this->input = $input;
+        $this->msgBuffer = $this->ffi->new('unsigned char['.Message::MAX_LENGTH.']');
+        $this->msgSize = $this->ffi->new('size_t');
+        $this->msgSizePtr = \FFI::addr($this->msgSize);
     }
 
     public function __destruct()
@@ -46,24 +49,23 @@ final class Input
 
     public function pullMessage(): ?Message
     {
-        $buffer = $this->ffi->new("unsigned char[64]");
-        /** @var \FFI\CData<int> $maxSize */
-        $maxSize = $this->ffi->new('size_t');
-        $maxSize->cdata = 64;
-        $this->ffi->rtmidi_in_get_message($this->input, $buffer, \FFI::addr($maxSize));
-        if($maxSize->cdata === 0) {
+        $this->msgSize->cdata = Message::MAX_LENGTH;
+        $this->ffi->rtmidi_in_get_message($this->input, $this->msgBuffer, $this->msgSizePtr);
+        if($this->msgSize->cdata === 0) {
             return null;
         }
-        $messageData = [];
-        for($i=0; $i<$maxSize->cdata; ++$i) {
-            $messageData[] = $buffer[$i];
-        }
 
-        return Message::fromIntegers($messageData);
+        return Message::fromBinString(\FFI::string($this->msgBuffer, $this->msgSize->cdata));
     }
 
     private string $name;
     private \FFI $ffi;
     /** @var \FFI\CData<\RtMidiInPtr> */
     private \FFI\CData $input;
+    /** @var \FFI\CData<string> */
+    private \FFI\CData $msgBuffer;
+    /** @var \FFI\CData<int> */
+    private \FFI\CData $msgSize;
+    /** @var \FFI\CData<int> */
+    private \FFI\CData $msgSizePtr;
 }

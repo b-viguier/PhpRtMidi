@@ -23,9 +23,8 @@ namespace {
     final class FFI
     {
         /**
-        * @template T
-        * @param \FFI\CData<T> $data
-        * @return \FFI\CData<T>
+        * @param \FFI\CData<int> $data
+        * @return \FFI\CData<int>
         */
         public static function addr(\FFI\CData &$data): FFI\CData {}
     }
