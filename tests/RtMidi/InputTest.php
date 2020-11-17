@@ -4,6 +4,7 @@ namespace bviguier\tests\RtMidi;
 
 use bviguier\RtMidi\Input;
 use bviguier\RtMidi\Message;
+use bviguier\RtMidi\TimeMessage;
 use bviguier\RtMidi\MidiBrowser;
 use bviguier\RtMidi\Exception\MidiException;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,7 @@ class InputTest extends TestCase
         $this->assertSame('Test Input', $input->name());
         $this->assertNull($input->pullMessage());
 
-        $msgSent = Message::fromIntegers([128, 60, 0]);
+        $msgSent = Message::fromIntegers(128, 60, 0);
         $virtualOutput->send($msgSent);
         usleep(100);
         $msgReceived = $input->pullMessage();
@@ -58,9 +59,9 @@ class InputTest extends TestCase
     public function testMessagesAllowing(int $filter): void
     {
         $messages = [
-            Input::ALLOW_SYSEX => Message::fromIntegers([0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7]),
-            Input::ALLOW_TIME => Message::fromIntegers([0xF8]),
-            Input::ALLOW_SENSE => Message::fromIntegers([0xFE]),
+            Input::ALLOW_SYSEX => Message::fromIntegers(0xF0, 0x7E, 0x7F, 0x06, 0x01, 0xF7),
+            Input::ALLOW_TIME => Message::fromIntegers(0xF8),
+            Input::ALLOW_SENSE => Message::fromIntegers(0xFE),
         ];
         $browser = new MidiBrowser();
         $virtualOutput = $browser->openVirtualOutput('Test Input');

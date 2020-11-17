@@ -3,6 +3,7 @@
 namespace bviguier\tests\RtMidi;
 
 use bviguier\RtMidi\Message;
+use bviguier\RtMidi\TimeMessage;
 use bviguier\RtMidi\MidiBrowser;
 use bviguier\RtMidi\Exception\MidiException;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +28,7 @@ class OutputTest extends TestCase
         $this->assertSame('Test Output', $output->name());
         $this->assertNull($virtualInput->pullMessage());
 
-        $msgSent = Message::fromIntegers([128, 60, 0]);
+        $msgSent = Message::fromIntegers(128, 60, 0);
         $output->send($msgSent);
         usleep(100);
         $msgReceived = $virtualInput->pullMessage();
@@ -48,7 +49,7 @@ class OutputTest extends TestCase
         unset($virtualInput);
         usleep(100);
 
-        $output->send(Message::fromIntegers([128, 60, 0]));
+        $output->send(Message::fromIntegers(128, 60, 0));
         $this->assertTrue(true); // No exception should be thrown
     }
 }
