@@ -11,16 +11,18 @@ final class Message
      */
     static public function fromIntegers(int $firstByte, int ...$tailBytes): self
     {
-        $instance = new self;
-        $instance->bytes = array_merge([$firstByte], $tailBytes);
-        foreach ($instance->bytes as $byte) {
+        $allBytes = array_merge([$firstByte], $tailBytes);
+        foreach ($allBytes as $byte) {
             if ($byte < 0 || $byte > 255) {
                 throw new \OutOfBoundsException('Byte value must be between 0 and 127.');
             }
         }
-        if (count($instance->bytes) > self::MAX_LENGTH) {
+        if (count($allBytes) > self::MAX_LENGTH) {
             throw new \LogicException('Message size cannot exceed '.self::MAX_LENGTH.' bytes.');
         }
+
+        $instance = new self;
+        $instance->bytes = join('', array_map('chr', $allBytes));
 
         return $instance;
     }
@@ -39,25 +41,23 @@ final class Message
         }
 
         $instance = new self;
-        for ($i = 0; $i < $length; ++$i) {
-            $instance->bytes[] = ord($bytes[$i]);
-        }
+        $instance->bytes = $bytes;
 
         return $instance;
     }
 
     public function size(): int
     {
-        return count($this->bytes);
+        return strlen($this->bytes);
     }
 
     public function byte(int $index): int
     {
-        if ($index < 0 || $index > count($this->bytes)) {
+        if ($index < 0 || $index > strlen($this->bytes)) {
             throw new \OutOfRangeException('Out of range byte offset.');
         }
 
-        return $this->bytes[$index];
+        return ord($this->bytes[$index]);
     }
 
     /**
@@ -65,23 +65,17 @@ final class Message
      */
     public function toIntegers(): array
     {
-        return $this->bytes;
+        return array_map('ord', str_split($this->bytes));
     }
 
     public function toBinString(): string
     {
-        $str = '';
-        foreach ($this->bytes as $byte) {
-            $str .= chr($byte);
-        }
-
-        return $str;
+        return $this->bytes;
     }
 
     private function __construct()
     {
     }
 
-    /** @var array<int> */
-    private array $bytes = [];
+    private string $bytes;
 }
