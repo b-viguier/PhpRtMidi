@@ -2,6 +2,8 @@
 
 namespace bviguier\RtMidi;
 
+use bviguier\RtMidi\Exception\MidiException;
+
 final class Input
 {
     public const ALLOW_NONE = 0;
@@ -13,7 +15,7 @@ final class Input
     /**
      * @param \FFI\CData<\RtMidiInPtr> $input
      */
-    public function __construct(string $name, \FFI $ffi, \FFI\CData $input)
+    public function __construct(string $name, Internal\RtMidiFFI $ffi, \FFI\CData $input)
     {
         $this->name = $name;
         $this->ffi = $ffi;
@@ -36,6 +38,7 @@ final class Input
     /**
      * By default Sysex, timing and active sensing messages are ignored.
      * @param int $allowMask Combination of self::ALLOW_*
+     * @throws MidiException
      */
     public function allow(int $allowMask): void
     {
@@ -47,6 +50,9 @@ final class Input
         );
     }
 
+    /**
+     * @throws MidiException
+     */
     public function pullMessage(): ?Message
     {
         $this->msgSize->cdata = Message::MAX_LENGTH;
@@ -59,7 +65,7 @@ final class Input
     }
 
     private string $name;
-    private \FFI $ffi;
+    private Internal\RtMidiFFI $ffi;
     /** @var \FFI\CData<\RtMidiInPtr> */
     private \FFI\CData $input;
     /** @var \FFI\CData<string> */

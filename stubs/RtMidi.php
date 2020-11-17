@@ -1,9 +1,13 @@
 <?php
 
-class RtMidiInPtr
+class RtMidiPtr
 {
 }
 
-class RtMidiOutPtr
+class RtMidiInPtr extends RtMidiPtr
+{
+}
+
+class RtMidiOutPtr extends RtMidiPtr
 {
 }

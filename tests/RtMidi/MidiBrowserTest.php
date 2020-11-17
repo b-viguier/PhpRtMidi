@@ -4,6 +4,7 @@ namespace bviguier\tests\RtMidi;
 
 use bviguier\RtMidi\Exception\LibraryException;
 use bviguier\RtMidi\MidiBrowser;
+use bviguier\RtMidi\Internal;
 use PHPUnit\Framework\TestCase;
 
 class MidiBrowserTest extends TestCase
@@ -17,7 +18,7 @@ class MidiBrowserTest extends TestCase
 
     public function testLoadExplicitRtMidiLibSucceed(): void
     {
-        $lib = MidiBrowser::defaultRtMidiLibrary();
+        $lib = Internal\RtMidiFFI::defaultRtMidiLibrary();
         $browser = new MidiBrowser($lib);
         $this->assertNotNull($browser);
         unset($browser);

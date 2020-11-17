@@ -3,11 +3,11 @@
 namespace {
 
     /**
-    * @method int rtmidi_get_port_count(\FFI\CData<\RtMidiInPtr>|\FFI\CData<\RtMidiOutPtr> $device)
-    * @method string rtmidi_get_port_name(\FFI\CData<\RtMidiInPtr>|\FFI\CData<\RtMidiOutPtr> $device, int $port)
+    * @method int rtmidi_get_port_count(\FFI\CData<\RtMidiPtr> $device)
+    * @method string rtmidi_get_port_name(\FFI\CData<\RtMidiPtr> $device, int $port)
     * @method int rtmidi_get_compiled_api(\FFI\CData<int> $apis, int $apis_size)
-    * @method void rtmidi_open_port (\FFI\CData<\RtMidiInPtr>|\FFI\CData<\RtMidiOutPtr> $device, int $portNumber, string $portName);
-    * @method void rtmidi_open_virtual_port (\FFI\CData<\RtMidiInPtr>|\FFI\CData<\RtMidiOutPtr> $device, string $portName);
+    * @method void rtmidi_open_port (\FFI\CData<\RtMidiPtr> $device, int $portNumber, string $portName);
+    * @method void rtmidi_open_virtual_port (\FFI\CData<\RtMidiPtr> $device, string $portName);
     *
     * @method \FFI\CData<\RtMidiInPtr> rtmidi_in_create_default()
     * @method \FFI\CData<\RtMidiInPtr> rtmidi_in_create(int $api, string $clientName, int $queueSizeLimit)

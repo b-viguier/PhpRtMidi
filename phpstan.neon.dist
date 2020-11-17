@@ -8,5 +8,5 @@ parameters:
     scanFiles:
         - stubs/RtMidi.php
     ignoreErrors:
-        - '#Cannot access offset int on FFI\\CData<int>\.#'
+        - '#Cannot access offset .+ on FFI\\CData<.*#'
         - '#Strict comparison using === between 1024 and 0 will always evaluate to false\.#'

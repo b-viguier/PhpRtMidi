@@ -2,12 +2,14 @@
 
 namespace bviguier\RtMidi;
 
+use bviguier\RtMidi\Exception\MidiException;
+
 class Output
 {
     /**
      * @param \FFI\CData<\RtMidiOutPtr> $output
      */
-    public function __construct(string $name, \FFI $ffi, \FFI\CData $output)
+    public function __construct(string $name, Internal\RtMidiFFI $ffi, \FFI\CData $output)
     {
         $this->name = $name;
         $this->ffi = $ffi;
@@ -25,6 +27,9 @@ class Output
         return $this->name;
     }
 
+    /**
+     * @throws MidiException
+     */
     public function send(Message $message): void
     {
         \FFI::memcpy($this->msgBuffer, $message->toBinString(), $size = $message->size());
@@ -32,7 +37,7 @@ class Output
     }
 
     private string $name;
-    private \FFI $ffi;
+    private Internal\RtMidiFFI $ffi;
     /** @var \FFI\CData<\RtMidiOutPtr> */
     private \FFI\CData $output;
     /** @var \FFI\CData<string> */
