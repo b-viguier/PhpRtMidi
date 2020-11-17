@@ -75,4 +75,22 @@ class MidiBrowserTest extends TestCase
         unset($virtualIntput);
         $this->assertSame($existingOutputs, $browser->availableOutputs());
     }
+
+    public function testInvalidQueueSizeFailsWhenOpeningInput(): void
+    {
+        $browser = new MidiBrowser();
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('Input queue size must be greater than 1.');
+
+        $browser->openInput('name', 1);
+    }
+
+    public function testInvalidQueueSizeFailsWhenOpeningVirtualInput(): void
+    {
+        $browser = new MidiBrowser();
+        $this->expectException(\OutOfRangeException::class);
+        $this->expectExceptionMessage('Input queue size must be greater than 1.');
+
+        $browser->openVirtualInput('name', 1);
+    }
 }

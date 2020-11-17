@@ -63,6 +63,10 @@ final class MidiBrowser
      */
     public function openInput(string $name, int $queueSize = 64, int $api = Api::UNSPECIFIED): Input
     {
+        if ($queueSize <= 1) {
+            throw new \OutOfRangeException('Input queue size must be greater than 1.');
+        }
+
         $port = -1;
         $count = $this->ffi->rtmidi_get_port_count($this->defaultInput);
         for($i=0;$i<$count;++$i) {
@@ -87,6 +91,10 @@ final class MidiBrowser
      */
     public function openVirtualInput(string $name, int $queueSize = 64, int $api = Api::UNSPECIFIED): Input
     {
+        if ($queueSize <= 1) {
+            throw new \OutOfRangeException('Input queue size must be greater than 1.');
+        }
+
         $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
         $this->ffi->rtmidi_open_virtual_port($input, $name);
 
