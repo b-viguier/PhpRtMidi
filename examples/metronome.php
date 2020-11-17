@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 function select(string $title, array $list): string
 {
@@ -20,17 +20,14 @@ function select(string $title, array $list): string
 
 $browser = new \bviguier\RtMidi\MidiBrowser();
 
-$input = $browser->openInput(select("Select a MIDI input", $browser->availableInputs()));
 $output = $browser->openOutput(select("Select a MIDI output", $browser->availableOutputs()));
+$noteOn = \bviguier\RtMidi\Message::fromIntegers(0x90, 0x3C, 0x50);
+$noteOff = \bviguier\RtMidi\Message::fromIntegers(0x80, 0x3C, 0x00);
 
-echo "Midi thru enabled, use Ctr-C to exit…\n";
-$msgCount = 0;
+echo "Metronome enabled on channel 1, use Ctr-C to exit…\n";
 while (true) {
-    if ($msg = $input->pullMessage()) {
-        $mem = memory_get_usage();
-        ++$msgCount;
-        echo "\r$msgCount messages transferred (Memory $mem) ";
-        $output->send($msg);
-    }
-    usleep(100);
+    $output->send($noteOn);
+    usleep(500_000);
+    $output->send($noteOff);
+    usleep(500_000);
 }
