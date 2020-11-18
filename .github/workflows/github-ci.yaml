@@ -9,6 +9,9 @@ jobs:
             matrix:
                 php-versions: ['7.4']
         steps:
+            - name: RtMidi Install
+              id: rtmidi-install
+              run: sudo apt-get install librtmidi4
             - name: Checkout
               uses: actions/checkout@v2
             - name: Setup PHP, with composer and extensions
