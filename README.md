@@ -3,12 +3,24 @@ Php library for realtime MIDI input/output, thanks to [RtMidi](https://github.co
 
 ## Requirements
 * Php `7.4` (for [FFI](https://www.php.net/manual/en/book.ffi.php) support)
-* [RtMidi](https://github.com/thestk/rtmidi) library compiled on your system. Refer to your package manager to install it, or compile it by yourself.
+* [RtMidi](https://github.com/thestk/rtmidi) *v4* library compiled on your system.
 
 ## Installation
 ```bash
 composer require bviguier/php-rtmidi
 ```
+
+On MacOS, you can install [RtMidi](https://github.com/thestk/rtmidi) globally thanks to [`brew`](https://brew.sh/).
+```bash
+brew install rtmidi
+``` 
+
+:warning: In Linux, package registries often provide `librtmidi.so.4` which is the version `3`!
+To compile it manualy:
+* Download and extract [http://www.music.mcgill.ca/~gary/rtmidi/release/rtmidi-4.0.0.tar.gz](http://www.music.mcgill.ca/~gary/rtmidi/release/rtmidi-4.0.0.tar.gz)
+* `./configure`
+* `make && make install`
+* Be sure that the library is available in you `LD_LIBRARY_PATH` or to provide the full path to `PhpRtMidi`. 
 
 ## Features
 * Send midi messages (including system exclusive)

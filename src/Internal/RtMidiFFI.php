@@ -176,7 +176,7 @@ class RtMidiFFI
     {
         switch(PHP_OS_FAMILY) {
             case 'Darwin': return 'librtmidi.dylib';
-            case 'Linux': return 'librtmidi4.so';
+            case 'Linux': return 'librtmidi.so.5';
         }
 
         throw new LibraryException(sprintf('No default RtMidi library configured for your OS family (%s).', PHP_OS_FAMILY));
@@ -228,8 +228,6 @@ typedef struct RtMidiWrapper* RtMidiOutPtr;
 enum RtMidiApi {RTMIDI_API_UNSPECIFIED, RTMIDI_API_MACOSX_CORE, RTMIDI_API_LINUX_ALSA,  RTMIDI_API_UNIX_JACK, RTMIDI_API_WINDOWS_MM, RTMIDI_API_RTMIDI_DUMMY, RTMIDI_API_NUM};
 
 int rtmidi_get_compiled_api (enum RtMidiApi *apis, unsigned int apis_size);
-const char *rtmidi_api_name(enum RtMidiApi api);
-const char *rtmidi_api_display_name(enum RtMidiApi api);
 
 void rtmidi_open_port (RtMidiPtr device, unsigned int portNumber, const char *portName);
 void rtmidi_open_virtual_port (RtMidiPtr device, const char *portName);
