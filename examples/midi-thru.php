@@ -3,7 +3,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-function select(string $title, array $list): string
+function select(string $title, string ...$list): string
 {
     do {
         echo "\n===============\n";
@@ -20,8 +20,8 @@ function select(string $title, array $list): string
 
 $browser = new \bviguier\RtMidi\MidiBrowser();
 
-$input = $browser->openInput(select("Select a MIDI input", $browser->availableInputs()));
-$output = $browser->openOutput(select("Select a MIDI output", $browser->availableOutputs()));
+$input = $browser->openInput(select("Select a MIDI input", ...$browser->availableInputs()));
+$output = $browser->openOutput(select("Select a MIDI output", ...$browser->availableOutputs()));
 
 echo "Midi thru enabled, use Ctr-C to exit…\n";
 $msgCount = 0;

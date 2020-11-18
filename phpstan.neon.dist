@@ -3,6 +3,7 @@ parameters:
     paths:
         - src
         - tests
+        - examples
     stubFiles:
         - stubs/FFI.stub
     scanFiles:

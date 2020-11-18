@@ -3,6 +3,7 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
+
 function select(string $title, string ...$list): string
 {
     do {
@@ -20,14 +21,15 @@ function select(string $title, string ...$list): string
 
 $browser = new \bviguier\RtMidi\MidiBrowser();
 
-$output = $browser->openOutput(select("Select a MIDI output", ...$browser->availableOutputs()));
-$noteOn = \bviguier\RtMidi\Message::fromIntegers(0x90, 0x3C, 0x50);
-$noteOff = \bviguier\RtMidi\Message::fromIntegers(0x80, 0x3C, 0x00);
+$input = $browser->openInput(select("Select a MIDI input", ...$browser->availableInputs()));
 
-echo "Metronome enabled on channel 1, use Ctr-C to exit…\n";
+echo "Logging messages received from [{$input->name()}], use Ctr-C to exit…\n";
 while (true) {
-    $output->send($noteOn);
-    usleep(500_000);
-    $output->send($noteOff);
-    usleep(500_000);
+    if ($msg = $input->pullMessage()) {
+        echo '# '.join('-', array_map(
+            fn($byte) => 'Ox'.str_pad(dechex($byte), 2, '0', STR_PAD_LEFT),
+            $msg->toIntegers()
+        )) . PHP_EOL;
+    }
+    usleep(100);
 }
