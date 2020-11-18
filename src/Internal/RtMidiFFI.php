@@ -50,7 +50,7 @@ class RtMidiFFI
      */
     public function rtmidi_in_ignore_types(\FFI\CData $device, bool $sysex, bool $time, bool $sense): void
     {
-        $this->ffi->rtmidi_in_ignore_types($this->resetDeviceState($device), $sysex, $time, $sense);
+        $this->ffi->rtmidi_in_ignore_types($device, $sysex, $time, $sense);
         $this->checkDeviceState($device);
     }
 
@@ -62,7 +62,7 @@ class RtMidiFFI
      */
     public function rtmidi_in_get_message(\FFI\CData $device, \FFI\CData $buffer, \FFI\CData $size): float
     {
-        $time = $this->ffi->rtmidi_in_get_message($this->resetDeviceState($device), $buffer, $size);
+        $time = $this->ffi->rtmidi_in_get_message($device, $buffer, $size);
         $this->checkDeviceState($device);
 
         return $time;
@@ -101,7 +101,7 @@ class RtMidiFFI
      */
     public function rtmidi_out_send_message(\FFI\CData $device, \FFI\CData $buffer, int $size): void
     {
-        $this->ffi->rtmidi_out_send_message($this->resetDeviceState($device), $buffer, $size);
+        $this->ffi->rtmidi_out_send_message($device, $buffer, $size);
         $this->checkDeviceState($device);
     }
 
@@ -120,7 +120,7 @@ class RtMidiFFI
      */
     public function rtmidi_get_port_name(\FFI\CData $device, int $port): string
     {
-        $name = $this->ffi->rtmidi_get_port_name($this->resetDeviceState($device), $port);
+        $name = $this->ffi->rtmidi_get_port_name($device, $port);
         $this->checkDeviceState($device);
 
         return $name;
@@ -133,7 +133,7 @@ class RtMidiFFI
      */
     public function rtmidi_get_port_count(\FFI\CData $device): int
     {
-        $count = $this->ffi->rtmidi_get_port_count($this->resetDeviceState($device));
+        $count = $this->ffi->rtmidi_get_port_count($device);
         $this->checkDeviceState($device);
 
         return $count;
@@ -146,7 +146,7 @@ class RtMidiFFI
      */
     public function rtmidi_open_port(\FFI\CData $device, int $port, string $name): void
     {
-        $this->ffi->rtmidi_open_port($this->resetDeviceState($device), $port, $name);
+        $this->ffi->rtmidi_open_port($device, $port, $name);
         $this->checkDeviceState($device);
     }
 
@@ -157,7 +157,7 @@ class RtMidiFFI
      */
     public function rtmidi_open_virtual_port(\FFI\CData $device, string $name): void
     {
-        $this->ffi->rtmidi_open_virtual_port($this->resetDeviceState($device), $name);
+        $this->ffi->rtmidi_open_virtual_port($device, $name);
         $this->checkDeviceState($device);
     }
 
@@ -189,19 +189,6 @@ class RtMidiFFI
      * @param \FFI\CData<T> $device
      *
      * @return \FFI\CData<T>
-     */
-    private function resetDeviceState(\FFI\CData $device): \FFI\CData
-    {
-        $device[0]->ok = true;
-
-        return $device;
-    }
-
-    /**
-     * @template T of \RtMidiPtr
-     * @param \FFI\CData<T> $device
-     *
-     * @return \FFI\CData<T>
      * @throws MidiException
      */
     private function checkDeviceState(\FFI\CData $device): \FFI\CData
@@ -209,6 +196,7 @@ class RtMidiFFI
         if ($device[0]->ok ) {
             return $device;
         }
+        $device[0]->ok = true;
 
         throw new MidiException(sprintf(
             'Midi Error: %s',
