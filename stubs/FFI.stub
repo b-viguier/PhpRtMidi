@@ -19,6 +19,14 @@ namespace {
     * @method \FFI\CData<\RtMidiOutPtr> rtmidi_out_create(int $api, string $clientName)
     * @method void rtmidi_out_free(\FFI\CData<\RtMidiOutPtr> $data)
     * @method \FFI\CData rtmidi_out_send_message(\FFI\CData<\RtMidiOutPtr> $output, \FFI\CData $message, int $length)
+    *
+    * @property int $RTMIDI_API_UNSPECIFIED;
+    * @property int $RTMIDI_API_MACOSX_CORE;
+    * @property int $RTMIDI_API_LINUX_ALSA;
+    * @property int $RTMIDI_API_UNIX_JACK;
+    * @property int $RTMIDI_API_WINDOWS_MM;
+    * @property int $RTMIDI_API_RTMIDI_DUMMY;
+    * @property int $RTMIDI_API_NUM;
     */
     final class FFI
     {
