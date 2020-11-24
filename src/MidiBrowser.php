@@ -83,7 +83,7 @@ final class MidiBrowser
         $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
         $this->ffi->rtmidi_open_port($input, $port, "[RtMidi] $name");
 
-        return new Input($name, $this->ffi, $input);
+        return new Internal\Input($name, $this->ffi, $input);
     }
 
     /**
@@ -98,7 +98,7 @@ final class MidiBrowser
         $input = $this->ffi->rtmidi_in_create($api, $name, $queueSize);
         $this->ffi->rtmidi_open_virtual_port($input, $name);
 
-        return new Input($name, $this->ffi, $input);
+        return new Internal\Input($name, $this->ffi, $input);
     }
 
     /**
@@ -137,7 +137,7 @@ final class MidiBrowser
         $output = $this->ffi->rtmidi_out_create($api, $name);
         $this->ffi->rtmidi_open_port($output, $port, "[RtMidi] $name");
 
-        return new Output($name, $this->ffi, $output);
+        return new Internal\Output($name, $this->ffi, $output);
     }
 
     /**
@@ -148,7 +148,7 @@ final class MidiBrowser
         $output = $this->ffi->rtmidi_out_create($api, $name);
         $this->ffi->rtmidi_open_virtual_port($output, $name);
 
-        return new Output($name, $this->ffi, $output);
+        return new Internal\Output($name, $this->ffi, $output);
     }
 
     private Internal\RtMidiFFI $ffi;

@@ -3,7 +3,6 @@
 namespace bviguier\tests\RtMidi;
 
 use bviguier\RtMidi\Message;
-use bviguier\RtMidi\TimeMessage;
 use bviguier\RtMidi\MidiBrowser;
 use bviguier\RtMidi\Exception\MidiException;
 use PHPUnit\Framework\TestCase;
