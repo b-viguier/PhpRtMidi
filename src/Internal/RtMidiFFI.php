@@ -120,10 +120,13 @@ class RtMidiFFI
      */
     public function rtmidi_get_port_name(\FFI\CData $device, int $port): string
     {
-        $name = $this->ffi->rtmidi_get_port_name($device, $port);
+        $sizePtr = $this->ffi->new('int');
+        $sizePtr->cdata = 1024;
+        $bufferPtr = $this->ffi->new("char[1024]");
+        $outputSize = $this->ffi->rtmidi_get_port_name($device, $port, $bufferPtr, \FFI::addr($sizePtr));
         $this->checkDeviceState($device);
 
-        return $name;
+        return \FFI::string($bufferPtr, $outputSize);
     }
 
     /**
@@ -174,6 +177,10 @@ class RtMidiFFI
      */
     public static function defaultRtMidiLibrary(): string
     {
+        if ( false !== getenv('LIB_RTMIDI_PATH')) {
+            return getenv('LIB_RTMIDI_PATH');
+        }
+
         switch(PHP_OS_FAMILY) {
             case 'Darwin': return 'librtmidi.dylib';
             case 'Linux': return 'librtmidi.so.5';
@@ -213,7 +220,7 @@ typedef struct RtMidiWrapper* RtMidiPtr;
 typedef struct RtMidiWrapper* RtMidiInPtr;
 typedef struct RtMidiWrapper* RtMidiOutPtr;
 
-enum RtMidiApi {RTMIDI_API_UNSPECIFIED, RTMIDI_API_MACOSX_CORE, RTMIDI_API_LINUX_ALSA,  RTMIDI_API_UNIX_JACK, RTMIDI_API_WINDOWS_MM, RTMIDI_API_RTMIDI_DUMMY, RTMIDI_API_NUM};
+enum RtMidiApi {RTMIDI_API_UNSPECIFIED, RTMIDI_API_MACOSX_CORE, RTMIDI_API_LINUX_ALSA,  RTMIDI_API_UNIX_JACK, RTMIDI_API_WINDOWS_MM, RTMIDI_API_RTMIDI_DUMMY, RTMIDI_API_WEB_MIDI_API, RTMIDI_API_WINDOWS_UWP, RTMIDI_API_ANDROID, RTMIDI_API_NUM};
 
 int rtmidi_get_compiled_api (enum RtMidiApi *apis, unsigned int apis_size);
 
@@ -221,7 +228,7 @@ void rtmidi_open_port (RtMidiPtr device, unsigned int portNumber, const char *po
 void rtmidi_open_virtual_port (RtMidiPtr device, const char *portName);
 void rtmidi_close_port (RtMidiPtr device);
 unsigned int rtmidi_get_port_count (RtMidiPtr device);
-const char* rtmidi_get_port_name (RtMidiPtr device, unsigned int portNumber);
+int rtmidi_get_port_name (RtMidiPtr device, unsigned int portNumber, char * bufOut, int * bufLen);
 
 RtMidiInPtr rtmidi_in_create_default (void);
 RtMidiInPtr rtmidi_in_create (enum RtMidiApi api, const char *clientName, unsigned int queueSizeLimit);

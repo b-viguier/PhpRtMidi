@@ -2,8 +2,8 @@
 Php library for realtime MIDI input/output, thanks to [RtMidi](https://github.com/thestk/rtmidi) and [FFI](https://www.php.net/manual/en/book.ffi.php).
 
 ## Requirements
-* Php `7.4` (for [FFI](https://www.php.net/manual/en/book.ffi.php) support)
-* [RtMidi](https://github.com/thestk/rtmidi) *v4* library compiled on your system.
+* Php `>=7.4` (for [FFI](https://www.php.net/manual/en/book.ffi.php) support)
+* [RtMidi](https://github.com/thestk/rtmidi) *v6* library compiled on your system.
 
 ## Installation
 ```bash
@@ -29,9 +29,10 @@ To compile it manualy:
 
 ## Usage
 If the [RtMidi](https://github.com/thestk/rtmidi) is not globally available on your system, you have to provide its path.
-By default, `PhpRtMidi` try to load the library by its _standard_ name, but the name may depend of your OS or your build.
+By default, `PhpRtMidi` try to load the library by its _standard_ name, but the name may depend on your OS or your build.
+You can also use `LIB_RTMIDI_PATH` environment variable to provide the path to the library.
 
-This library doesn't match exactly original [RtMidi](https://github.com/thestk/rtmidi) interfaces, but try to expose a straigthforward developer experience.
+This library doesn't match exactly original [RtMidi](https://github.com/thestk/rtmidi) interfaces, but try to expose a straightforward developer experience.
 ```php
 $browser = new \bviguier\RtMidi\MidiBrowser();
 
